@@ -12,6 +12,7 @@ const Register = lazy(() => import('./pages/auth/Register'));
 const FarmerDashboard = lazy(() => import('./pages/dashboard/FarmerDashboard'));
 const OfficerDashboard = lazy(() => import('./pages/dashboard/OfficerDashboard'));
 const AdminDashboard = lazy(() => import('./pages/dashboard/AdminDashboard'));
+const CreateOfficerPage = lazy(() => import('./pages/admin/CreateOfficerPage'));
 
 const HomeRedirect = () => {
   const user = useAuthStore((state) => state.user);
@@ -43,6 +44,7 @@ const App = () => {
               </Route>
               <Route element={<ProtectedRoute roles={['admin']} />}>
                 <Route path="/admin" element={<AdminDashboard />} />
+                <Route path="/admin/officers" element={<CreateOfficerPage />} />
               </Route>
             </Route>
           </Route>

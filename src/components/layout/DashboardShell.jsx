@@ -9,6 +9,7 @@ const DashboardShell = () => {
     { to: '/dashboard', label: 'Farmer', roles: ['farmer'] },
     { to: '/officer', label: 'Officer', roles: ['officer'] },
     { to: '/admin', label: 'Admin', roles: ['admin'] },
+    { to: '/admin/officers', label: 'Create Officer', roles: ['admin'] },
   ];
 
   return (
