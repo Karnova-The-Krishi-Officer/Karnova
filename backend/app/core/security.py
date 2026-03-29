@@ -20,4 +20,4 @@ def create_token(user_id: str, role: str) -> str:
         'role': role,
         'exp': datetime.now(timezone.utc) + timedelta(days=1),
     }
-    return jwt.encode(payload, settings.jwt_secret, algorithm='HS256')
+    return jwt.encode(payload, settings.JWT_SECRET, algorithm='HS256')
