@@ -17,9 +17,102 @@ body {
   background-color: #02130d;
 }
 
-.bg-karnova-gradient {
+.bg-karnova-gradient,
+.auth-shell {
   background-image:
     radial-gradient(circle at 20% 20%, rgba(16, 185, 129, 0.14), transparent 30%),
     radial-gradient(circle at 90% 10%, rgba(16, 185, 129, 0.14), transparent 35%),
     linear-gradient(135deg, #02130d 0%, #031f16 40%, #02130d 100%);
+}
+
+.auth-shell {
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-orb {
+  position: absolute;
+  width: 460px;
+  height: 460px;
+  opacity: 0.23;
+  filter: blur(2px);
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.5), rgba(16, 185, 129, 0));
+  pointer-events: none;
+}
+
+.auth-orb-left {
+  left: -180px;
+  bottom: -140px;
+}
+
+.auth-orb-right {
+  right: -200px;
+  bottom: -180px;
+}
+
+.auth-card {
+  border-radius: 36px;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  background: rgba(1, 21, 14, 0.84);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+}
+
+.auth-field {
+  display: block;
+}
+
+.auth-label {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.28em;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #9ca3af;
+}
+
+.auth-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  border-radius: 24px;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  background: rgba(0, 0, 0, 0.25);
+  padding: 0.9rem 1.15rem;
+  color: #94a3b8;
+}
+
+.auth-input-wrap:focus-within {
+  border-color: rgba(16, 185, 129, 0.8);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+}
+
+.auth-input-wrap input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #e2e8f0;
+  font-size: 1.05rem;
+}
+
+.auth-input-wrap input::placeholder {
+  color: #6b7280;
+}
+
+.auth-button {
+  width: 100%;
+  border: none;
+  border-radius: 999px;
+  padding: 1rem 1.25rem;
+  font-size: 1.1rem;
+  color: white;
+  background: linear-gradient(90deg, #10b981, #12d489);
+  cursor: pointer;
+}
+
+.auth-button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
 }
