@@ -1,55 +1,61 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import './index.css';
-import { AppLayout } from './layouts/AppLayout';
-import { useAppStore } from './store/useAppStore';
-import { initSyncEngine } from './services/syncEngine';
+import useAuthStore from './store/authStore';
+import DashboardShell from './components/layout/DashboardShell';
+import ProtectedRoute from './routes/ProtectedRoute';
+import { initOfflineSync, syncQueuedQueries } from './services/offlineSync';
 
-const LoginPage = lazy(() => import('./pages/LoginPage'));
-const DashboardPage = lazy(() => import('./pages/DashboardPage'));
-const QueryPage = lazy(() => import('./pages/QueryPage'));
-const SchemesPage = lazy(() => import('./pages/SchemesPage'));
-const MarketplacePage = lazy(() => import('./pages/MarketplacePage'));
-const AdminUsersPage = lazy(() => import('./pages/AdminUsersPage'));
-const OfficerEscalationsPage = lazy(() => import('./pages/OfficerEscalationsPage'));
+const Login = lazy(() => import('./pages/auth/Login'));
+const Register = lazy(() => import('./pages/auth/Register'));
+const FarmerDashboard = lazy(() => import('./pages/dashboard/FarmerDashboard'));
+const OfficerDashboard = lazy(() => import('./pages/dashboard/OfficerDashboard'));
+const AdminDashboard = lazy(() => import('./pages/dashboard/AdminDashboard'));
 
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js');
-  });
-}
+const HomeRedirect = () => {
+  const user = useAuthStore((state) => state.user);
 
-initSyncEngine();
-
-const Protected = ({ children }) => {
-  const token = useAppStore((state) => state.token);
-  return token ? children : <Navigate to="/login" replace />;
+  if (user?.role === 'admin') return <Navigate to="/admin" replace />;
+  if (user?.role === 'officer') return <Navigate to="/officer" replace />;
+  return <Navigate to="/dashboard" replace />;
 };
 
-const App = () => (
-  <BrowserRouter>
-    <Suspense fallback={<div className="p-6">Loading...</div>}>
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route
-          path="/"
-          element={
-            <Protected>
-              <AppLayout />
-            </Protected>
-          }
-        >
-          <Route index element={<DashboardPage />} />
-          <Route path="queries" element={<QueryPage />} />
-          <Route path="schemes" element={<SchemesPage />} />
-          <Route path="marketplace" element={<MarketplacePage />} />
-          <Route path="admin/users" element={<AdminUsersPage />} />
-          <Route path="officer/escalations" element={<OfficerEscalationsPage />} />
-        </Route>
-      </Routes>
-    </Suspense>
-  </BrowserRouter>
-);
+const App = () => {
+  useEffect(() => {
+    initOfflineSync();
+    syncQueuedQueries().catch(() => null);
+  }, []);
 
-createRoot(document.getElementById('root')).render(<App />);
+  return (
+    <BrowserRouter>
+      <Suspense fallback={<div className="min-h-screen grid place-items-center bg-karnova-gradient text-slate-200">Loading...</div>}>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+
+          <Route element={<ProtectedRoute />}>
+            <Route path="/" element={<HomeRedirect />} />
+            <Route element={<DashboardShell />}>
+              <Route path="/dashboard" element={<FarmerDashboard />} />
+              <Route element={<ProtectedRoute roles={['officer']} />}>
+                <Route path="/officer" element={<OfficerDashboard />} />
+              </Route>
+              <Route element={<ProtectedRoute roles={['admin']} />}>
+                <Route path="/admin" element={<AdminDashboard />} />
+              </Route>
+            </Route>
+          </Route>
+
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Suspense>
+    </BrowserRouter>
+  );
+};
+
+createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+);
