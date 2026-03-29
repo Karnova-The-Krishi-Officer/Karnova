@@ -1,25 +1,35 @@
-import logo from './logo.svg';
+import React, { Suspense, lazy, useMemo } from 'react';
 import './App.css';
+import AppLayout from './layouts/AppLayout';
+import Skeleton from './components/Skeleton';
+import ToastContainer from './components/ToastContainer';
+import { useAppStore } from './store/appStore';
+import { useOnlineSync } from './hooks/useOnlineSync';
 
-function App() {
+const LoginPage = lazy(() => import('./pages/LoginPage'));
+const FarmerPage = lazy(() => import('./pages/FarmerPage'));
+const OfficerPage = lazy(() => import('./pages/OfficerPage'));
+const AdminPage = lazy(() => import('./pages/AdminPage'));
+
+const App = () => {
+  const user = useAppStore((s) => s.user);
+  const role = useAppStore((s) => s.role);
+  useOnlineSync();
+
+  const panel = useMemo(() => {
+    if (role === 'officer') return <OfficerPage />;
+    if (role === 'admin') return <AdminPage />;
+    return <FarmerPage />;
+  }, [role]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Suspense fallback={<Skeleton lines={6} />}>
+        {user ? <AppLayout>{panel}</AppLayout> : <LoginPage />}
+      </Suspense>
+      <ToastContainer />
+    </>
   );
-}
+};
 
 export default App;
