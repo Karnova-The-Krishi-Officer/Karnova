@@ -1,70 +1,91 @@
-# Getting Started with Create React App
+# Karnova : the Krishi Officier
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Offline-first agriculture workflow platform for farmers, officers, and admins.
 
-## Available Scripts
+## Stack
+- **Frontend**: React (Vite), Tailwind CSS, Zustand, React Router
+- **Backend**: FastAPI
+- **Database**: MongoDB
+- **Offline-first**: IndexedDB queue, service worker caching, background sync trigger
 
-In the project directory, you can run:
+## Project Structure
 
-### `npm start`
+```
+src/
+  components/
+  pages/
+  layouts/
+  services/
+  store/
+  hooks/
+  utils/
+backend/app/
+  auth/
+  users/
+  admin/
+  officer/
+  farmer/
+  ai/
+  sync/
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Environment
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Frontend `.env`:
 
-### `npm test`
+```bash
+VITE_API_BASE_URL=http://localhost:8000
+VITE_APP_NAME="Karnova : the Krishi Officier"
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Backend `backend/.env`:
 
-### `npm run build`
+```bash
+MONGO_URI=mongodb://localhost:27017/karnova
+JWT_SECRET=supersecretkey
+AI_API_KEY=placeholder_key
+STORAGE_TYPE=local
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Run Locally
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### 1) Install frontend dependencies
+```bash
+npm install
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 2) Install backend dependencies
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r backend/requirements.txt
+```
 
-### `npm run eject`
+### 3) Start MongoDB locally
+```bash
+mongod --dbpath /data/db
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### 4) Start backend
+```bash
+npm run backend
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### 5) Start frontend
+```bash
+npm run dev
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Key Features
+- JWT login (email/phone/krishi-id as `identifier`)
+- Role-aware navigation (admin/officer/farmer)
+- Dark/Light mode with persisted preference
+- AI query submission with offline queue fallback
+- `/sync` endpoint for queued action processing
+- Local file upload saved under `backend/uploads`
+- Service worker shell cache for offline app availability
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Demo Credentials
+- `admin@karnova.local` / `admin123`
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This user is auto-seeded on first login attempt.
