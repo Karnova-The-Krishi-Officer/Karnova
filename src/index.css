@@ -3,19 +3,23 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: light;
-}
-
-.dark {
-  color-scheme: dark;
-}
-
-body {
-  @apply bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300;
-  margin: 0;
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
 }
 
-.card {
-  @apply bg-white/90 dark:bg-slate-900/80 rounded-2xl shadow-soft border border-slate-200/60 dark:border-slate-700/60;
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: #e2e8f0;
+  background-color: #02130d;
+}
+
+.bg-karnova-gradient {
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(16, 185, 129, 0.14), transparent 30%),
+    radial-gradient(circle at 90% 10%, rgba(16, 185, 129, 0.14), transparent 35%),
+    linear-gradient(135deg, #02130d 0%, #031f16 40%, #02130d 100%);
 }
