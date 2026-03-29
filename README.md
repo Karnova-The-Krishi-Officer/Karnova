@@ -10,23 +10,24 @@ Offline-first agriculture workflow platform for farmers, officers, and admins.
 
 ## Project Structure
 
-```
-src/
-  components/
-  pages/
-  layouts/
-  services/
-  store/
-  hooks/
-  utils/
-backend/app/
-  auth/
-  users/
-  admin/
-  officer/
-  farmer/
-  ai/
-  sync/
+```text
+Karnova/
+  src/
+    components/
+    pages/
+    layouts/
+    services/
+    store/
+  backend/
+    .env
+    app/
+      auth/
+      users/
+      admin/
+      officer/
+      farmer/
+      ai/
+      sync/
 ```
 
 ## Environment
@@ -66,15 +67,32 @@ pip install -r backend/requirements.txt
 mongod --dbpath /data/db
 ```
 
-### 4) Start backend
+### 4) Start backend (from repository root)
+Use either command below:
+
 ```bash
 npm run backend
+```
+
+```bash
+uvicorn backend.app.main:app --reload --env-file backend/.env
 ```
 
 ### 5) Start frontend
 ```bash
 npm run dev
 ```
+
+### 6) Open API docs
+```text
+http://localhost:8000/docs
+```
+
+## Troubleshooting
+
+- If backend startup reports missing `MONGO_URI`, `JWT_SECRET`, or `AI_API_KEY`, verify the file exists at **exactly** `backend/.env`.
+- Always run Uvicorn from the repository root so module path `backend.app.main:app` resolves correctly.
+- If your local checkout accidentally has nested directories (for example `Karnova/Karnova/backend`), move to a flat root layout (`Karnova/backend` and `Karnova/src`) before running commands.
 
 ## Key Features
 - JWT login (email/phone/krishi-id as `identifier`)
