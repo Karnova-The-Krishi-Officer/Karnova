@@ -10,7 +10,7 @@ async def current_user(credentials: HTTPAuthorizationCredentials = Depends(secur
     if not credentials:
         raise HTTPException(status_code=401, detail='Missing token')
     try:
-        payload = jwt.decode(credentials.credentials, settings.jwt_secret, algorithms=['HS256'])
+        payload = jwt.decode(credentials.credentials, settings.JWT_SECRET, algorithms=['HS256'])
         return {'id': payload['sub'], 'role': payload['role']}
     except JWTError:
         raise HTTPException(status_code=401, detail='Invalid token')

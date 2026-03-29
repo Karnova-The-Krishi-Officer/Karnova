@@ -1,15 +1,17 @@
-from pydantic import Field
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
+import os
 
 
 class Settings(BaseSettings):
-    mongo_uri: str = Field(alias='MONGO_URI')
-    jwt_secret: str = Field(alias='JWT_SECRET')
-    ai_api_key: str = Field(alias='AI_API_KEY')
-    storage_type: str = Field(default='local', alias='STORAGE_TYPE')
+    MONGO_URI: str
+    JWT_SECRET: str
+    AI_API_KEY: str
+    STORAGE_TYPE: str = 'local'
 
-    class Config:
-        env_file = 'backend/.env'
+    model_config = SettingsConfigDict(
+        env_file=os.path.join(os.path.dirname(__file__), '../../.env')
+    )
 
 
 settings = Settings()
+print('MONGO_URI:', settings.MONGO_URI)

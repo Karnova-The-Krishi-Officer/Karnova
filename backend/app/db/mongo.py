@@ -1,7 +1,7 @@
 from motor.motor_asyncio import AsyncIOMotorClient
 from ..core.config import settings
 
-client = AsyncIOMotorClient(settings.mongo_uri)
+client = AsyncIOMotorClient(settings.MONGO_URI)
 db = client.get_default_database()
 
 
